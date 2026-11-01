@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+pymupdf
+sentence-transformers
+faiss-cpu
+rank-bm25
+numpy
+pandas
+pydantic
+python-dotenv
+streamlit
+pytest
+ragas
