@@ -1,4 +1,4 @@
-import fitz
+import pymupdf
 from pathlib import Path
 
 def load_pdf(file_path):
@@ -14,13 +14,33 @@ def load_pdf(file_path):
     print(f"Loading PDF file: {file_path}")
 
     # Load the PDF
-    doc = fitz.open(file_path)
+    doc = pymupdf.open(file_path)
     print("Pages: ", len(doc))
 
-    #Extract text from each page
+    #Extract file name
 
-    for page_number, page in enumerate(doc, start=1):
+    file_name = path.name
+
+    #Extract metadata
+
+    metadata = doc.metadata
+
+    pages = []
+
+    for page_number, page in enumerate(doc, start = 1):
         text = page.get_text()
-        print(f"Page {page_number}, {text}")  # Print first 100 characters of each page
 
-    doc.close()
+        text_data = {
+            "page_number": page_number,
+            "text": text
+        }
+
+        pages.append(text_data)
+
+    #Structured data
+
+    return {
+        "file_name": file_name,
+        "metadata": metadata,
+        "pages": pages
+    }

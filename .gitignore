@@ -16,3 +16,6 @@ __pycache__/
 data/raw/
 data/processed/
 data/indexed/
+
+#Test
+test/
