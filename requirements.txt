@@ -6,6 +6,7 @@ faiss-cpu
 rank-bm25
 numpy
 pandas
+pathlib
 pydantic
 python-dotenv
 streamlit

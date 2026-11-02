@@ -1,0 +1,18 @@
+# Virtual environment
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Environment variables
+.env
+
+# PDF documents
+*.pdf
+
+# Generated data
+data/raw/
+data/processed/
+data/indexed/
