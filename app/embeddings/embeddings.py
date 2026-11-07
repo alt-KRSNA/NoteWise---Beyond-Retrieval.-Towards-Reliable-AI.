@@ -1,9 +1,12 @@
-from sentence_transformers import SentenceTransformers
 
-Model_NAME = "BAAI/bge-small-en-v1.5"
+from sentence_transformers import SentenceTransformer
+
+
+MODEL_NAME = "BAAI/bge-small-en-v1.5"
+
 
 def generate_embeddings(chunks):
-        """
+    """
     Generate numerical embeddings for document chunks.
 
     Args:
@@ -12,24 +15,34 @@ def generate_embeddings(chunks):
     Returns:
         List of chunks with their corresponding embeddings.
     """
-        if not chunks:
-            raise ValueError("Chunks list is empty")
 
-        model = SentenceTransformers(Model_NAME)
+    if not chunks:
+        raise ValueError("Chunks list is empty")
 
-        texts = [chunk['text'] for chunk in chunks]
+    model = SentenceTransformer(MODEL_NAME)
 
-        embeddings = model.encode(texts, convert_to_numpy=True, normalize_embeddings=True)
+    texts = [chunk["text"] for chunk in chunks]
 
-        embedded_chunks = []
+    embeddings = model.encode(
+        texts,
+        convert_to_numpy=True,
+        normalize_embeddings=True
+    )
 
-        for chunk, embedding in zip(chunks, embeddings):
+    if len(embeddings) != len(chunks):
+        raise RuntimeError(
+            "Embedding count does not match chunk count."
+        )
 
-              embedded_chunk = {
-                    **chunk,
-                    "embedding": embedding
-              }
+    embedded_chunks = []
+
+    for chunk, embedding in zip(chunks, embeddings):
+
+        embedded_chunk = {
+            **chunk,
+            "embedding": embedding
+        }
 
         embedded_chunks.append(embedded_chunk)
 
-        return embedded_chunks
+    return embedded_chunks

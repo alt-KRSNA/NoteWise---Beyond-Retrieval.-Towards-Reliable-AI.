@@ -13,3 +13,4 @@ streamlit
 pytest
 ragas
 transformers
+faiss-cpu
