@@ -138,6 +138,10 @@ class FAISSVectorStore:
 
         if self.index.ntotal == 0:
             return set()
+        
+    def get_ids(self):
+        """Return all vector IDs currently stored in FAISS."""
+        return self._existing_ids()
 
         return set(
             faiss.vector_to_array(

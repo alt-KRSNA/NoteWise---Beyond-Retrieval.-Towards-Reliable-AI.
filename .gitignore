@@ -36,3 +36,18 @@ storage/faiss/
 
 # Logs
 *.log
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Environment variables
+.env
+
+# Database and generated indexes
+database/*.db
+database/*.index
+
+# Local documents
+AI_Sample.pdf
