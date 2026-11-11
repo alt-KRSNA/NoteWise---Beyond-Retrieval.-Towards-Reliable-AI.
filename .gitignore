@@ -46,3 +46,9 @@ test/evaluation/evidence_evaluation_results.json
 tools/
 
 tools/
+
+test/inspect_retrieval.py
+test/test_generator.py
+test/test_model.py
+test/test_pipeline.py
+test/test_retriever.py
