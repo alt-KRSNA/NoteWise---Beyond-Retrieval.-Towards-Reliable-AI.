@@ -1,9 +1,16 @@
 
 from app.retrieval.retriever import retrieve
 from app.generation.generator import generate_response
+from app.storage.sqlite_store import DEFAULT_DB_PATH
+from app.vector_store.faiss_store import DEFAULT_INDEX_PATH
 
 
-def answer_question(query, top_k=5):
+def answer_question(
+    query,
+    top_k=5,
+    db_path=DEFAULT_DB_PATH,
+    index_path=DEFAULT_INDEX_PATH,
+):
     """
     Retrieve relevant evidence and generate
     an answer grounded in the retrieved chunks.
@@ -13,7 +20,12 @@ def answer_question(query, top_k=5):
         raise ValueError("Query must be a non-empty string.")
 
     # 1. Retrieve relevant chunks
-    chunks = retrieve(query, top_k=top_k)
+    chunks = retrieve(
+        query,
+        top_k=top_k,
+        db_path=db_path,
+        index_path=index_path,
+    )
 
     # 2. Abstain if no evidence is retrieved
     if not chunks:
@@ -28,36 +40,36 @@ def answer_question(query, top_k=5):
     for i, chunk in enumerate(chunks, start=1):
         context_parts.append(
             f"""
-            [Source {i}]
-            Document ID: {chunk['document_id']}
-            Page: {chunk['page_number']}
-            Evidence: {chunk['text']}
-            """
+[Source {i}]
+Document ID: {chunk['document_id']}
+Page: {chunk['page_number']}
+Evidence: {chunk['text']}
+"""
         )
 
     context = "\n".join(context_parts)
 
     # 4. Construct grounded prompt
     prompt = f"""
-    You are NoteWise, an evidence-based AI research assistant.
+You are NoteWise, an evidence-based AI research assistant.
 
-    Answer the user's question using ONLY the evidence provided below.
+Answer the user's question using ONLY the evidence provided below.
 
-    Rules:
-    1. Do not use outside knowledge.
-    2. Do not invent facts or citations.
-    3. If the evidence is insufficient, clearly say so.
-    4. Cite supporting sources using [Source X, Page Y].
-    5. Keep the answer clear and relevant.
+Rules:
+1. Do not use outside knowledge.
+2. Do not invent facts or citations.
+3. If the evidence is insufficient, clearly say so.
+4. Cite supporting sources using [Source X, Page Y].
+5. Keep the answer clear and relevant.
 
-    EVIDENCE:
-    {context}
+EVIDENCE:
+{context}
 
-    USER QUESTION:
-    {query}
+USER QUESTION:
+{query}
 
-    ANSWER:
-    """
+ANSWER:
+"""
 
     # 5. Generate answer
     answer = generate_response(prompt, max_tokens=800)

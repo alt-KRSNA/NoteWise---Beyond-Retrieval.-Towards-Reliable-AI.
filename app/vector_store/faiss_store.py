@@ -5,9 +5,7 @@ import faiss
 import numpy as np
 
 
-DEFAULT_INDEX_PATH = Path("database/faiss.index")
-
-
+DEFAULT_INDEX_PATH = Path("database/faiss_rebuild.index")
 class FAISSVectorStore:
     """Manage vector indexing, similarity search and persistence."""
 
@@ -54,9 +52,7 @@ class FAISSVectorStore:
         if np.any(ids < 0):
             raise ValueError("FAISS IDs must be non-negative.")
 
-        if len(set(ids.tolist()).intersection(
-            self._existing_ids()
-        )):
+        if len(set(ids.tolist()).intersection(self._existing_ids())):
             raise ValueError("Some FAISS IDs already exist in the index.")
 
         self.index.add_with_ids(vectors, ids)
@@ -138,13 +134,14 @@ class FAISSVectorStore:
 
         if self.index.ntotal == 0:
             return set()
-        
-    def get_ids(self):
-        """Return all vector IDs currently stored in FAISS."""
-        return self._existing_ids()
 
         return set(
             faiss.vector_to_array(
                 self.index.id_map
             ).tolist()
         )
+
+    def get_ids(self):
+        """Return all vector IDs currently stored in FAISS."""
+
+        return self._existing_ids()

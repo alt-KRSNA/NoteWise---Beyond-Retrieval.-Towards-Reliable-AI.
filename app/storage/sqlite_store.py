@@ -7,7 +7,7 @@ from pathlib import Path
 from uuid import uuid4
 
 
-DEFAULT_DB_PATH = Path("database/notewise.db")
+DEFAULT_DB_PATH = Path("database/notewise_rebuild.db")
 
 
 @contextmanager
