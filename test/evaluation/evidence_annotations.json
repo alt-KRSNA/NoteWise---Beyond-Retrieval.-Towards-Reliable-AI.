@@ -1,0 +1,18 @@
+
+{
+    "1": {"first_supporting_rank": 1, "label": "direct_support"},
+    "2": {"first_supporting_rank": 1, "label": "direct_support"},
+    "3": {"first_supporting_rank": 1, "label": "direct_support"},
+    "4": {"first_supporting_rank": 2, "label": "direct_support"},
+    "5": {"first_supporting_rank": 1, "label": "direct_support"},
+    "6": {"first_supporting_rank": null, "label": "no_support"},
+    "7": {"first_supporting_rank": 1, "label": "direct_support"},
+    "8": {"first_supporting_rank": 1, "label": "direct_support"},
+    "9": {"first_supporting_rank": null, "label": "related_only"},
+    "10": {"first_supporting_rank": null, "label": "no_support"},
+    "11": {"first_supporting_rank": null, "label": "no_support"},
+    "12": {"first_supporting_rank": null, "label": "no_support"},
+    "13": {"first_supporting_rank": null, "label": "no_support"},
+    "14": {"first_supporting_rank": null, "label": "no_support"},
+    "15": {"first_supporting_rank": null, "label": "no_support"}
+}

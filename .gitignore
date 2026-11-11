@@ -1,6 +1,16 @@
- Python cache
+
+# Python cache
 __pycache__/
 *.py[cod]
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment variables and secrets
+.env
+.env.*
 
 # PDF documents
 *.pdf
@@ -10,18 +20,6 @@ data/raw/
 data/processed/
 data/indexed/
 
-#Test
-test/
-
-# Environment
-.venv/
-__pycache__/
-*.py[cod]
-
-# Environment variables
-.env
-.env.*
-
 # SQLite databases
 database/*.db
 database/*.sqlite
@@ -30,24 +28,16 @@ database/*.db-journal
 database/*.db-wal
 database/*.db-shm
 
-# FAISS generated indexes
+# FAISS indexes
 storage/faiss/
 *.faiss
+*.index
+
+# Recovery dumps
+database/recovery_dump*.sql
+
+# Generated evaluation results
+test/evaluation/evidence_evaluation_results.json
 
 # Logs
 *.log
-
-# Python
-__pycache__/
-*.py[cod]
-.venv/
-
-# Environment variables
-.env
-
-# Database and generated indexes
-database/*.db
-database/*.index
-
-# Local documents
-AI_Sample.pdf
