@@ -41,3 +41,8 @@ test/evaluation/evidence_evaluation_results.json
 
 # Logs
 *.log
+
+# Local development tools
+tools/
+
+tools/
