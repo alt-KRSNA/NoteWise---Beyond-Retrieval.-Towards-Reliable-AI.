@@ -6,6 +6,7 @@ import numpy as np
 
 
 DEFAULT_INDEX_PATH = Path("database/faiss_rebuild.index")
+
 class FAISSVectorStore:
     """Manage vector indexing, similarity search and persistence."""
 

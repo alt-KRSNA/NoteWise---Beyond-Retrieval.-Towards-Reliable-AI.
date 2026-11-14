@@ -1,6 +1,8 @@
 
 from app.retrieval.retriever import retrieve
 from app.generation.generator import generate_response
+from app.generation.citation_validator import validate_citations
+
 from app.storage.sqlite_store import DEFAULT_DB_PATH
 from app.vector_store.faiss_store import DEFAULT_INDEX_PATH
 
@@ -12,8 +14,8 @@ def answer_question(
     index_path=DEFAULT_INDEX_PATH,
 ):
     """
-    Retrieve relevant evidence and generate
-    an answer grounded in the retrieved chunks.
+    Retrieve relevant evidence, generate a grounded answer,
+    and validate its source and page citations.
     """
 
     if not isinstance(query, str) or not query.strip():
@@ -27,30 +29,33 @@ def answer_question(
         index_path=index_path,
     )
 
-    # 2. Abstain if no evidence is retrieved
+    # 2. Handle the case where no evidence is retrieved
     if not chunks:
-        return {
-            "answer": "I could not find relevant evidence in the available documents.",
-            "sources": [],
-        }
+        answer = (
+            "I could not find relevant evidence "
+            "in the available documents."
+        )
 
-    # 3. Prepare evidence context
-    context_parts = []
+        sources = []
 
-    for i, chunk in enumerate(chunks, start=1):
-        context_parts.append(
-            f"""
+    else:
+        # 3. Prepare evidence context
+        context_parts = []
+
+        for i, chunk in enumerate(chunks, start=1):
+            context_parts.append(
+                f"""
 [Source {i}]
 Document ID: {chunk['document_id']}
 Page: {chunk['page_number']}
 Evidence: {chunk['text']}
 """
-        )
+            )
 
-    context = "\n".join(context_parts)
+        context = "\n".join(context_parts)
 
-    # 4. Construct grounded prompt
-    prompt = f"""
+        # 4. Construct grounded prompt
+        prompt = f"""
 You are NoteWise, an evidence-based AI research assistant.
 
 Answer the user's question using ONLY the evidence provided below.
@@ -71,22 +76,30 @@ USER QUESTION:
 ANSWER:
 """
 
-    # 5. Generate answer
-    answer = generate_response(prompt, max_tokens=800)
+        # 5. Generate answer
+        answer = generate_response(prompt, max_tokens=800)
 
-    # 6. Return answer and source metadata
-    sources = [
-        {
-            "document_id": chunk["document_id"],
-            "chunk_id": chunk["chunk_id"],
-            "page_number": chunk["page_number"],
-            "faiss_id": chunk["faiss_id"],
-            "score": chunk["score"],
-        }
-        for chunk in chunks
-    ]
+        # 6. Prepare source metadata
+        sources = [
+            {
+                "document_id": chunk["document_id"],
+                "chunk_id": chunk["chunk_id"],
+                "page_number": chunk["page_number"],
+                "faiss_id": chunk["faiss_id"],
+                "score": chunk["score"],
+            }
+            for chunk in chunks
+        ]
 
+    # 7. Validate citations against retrieved chunks
+    citation_validation = validate_citations(
+        answer,
+        chunks,
+    )
+
+    # 8. Return answer, sources, and citation validation
     return {
         "answer": answer,
         "sources": sources,
+        "citation_validation": citation_validation,
     }
