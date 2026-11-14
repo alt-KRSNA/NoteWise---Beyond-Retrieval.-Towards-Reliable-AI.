@@ -44,11 +44,10 @@ test/evaluation/evidence_evaluation_results.json
 
 # Local development tools
 tools/
-
-tools/
-
+# Local inspection scripts
 test/inspect_retrieval.py
+test/inspect_evidence_verifier.py
+
+# Temporarily ignored test files
 test/test_generator.py
 test/test_model.py
-test/test_pipeline.py
-test/test_retriever.py
